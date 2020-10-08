@@ -21,3 +21,17 @@ class Conv3x3:
             for j in range(w - 2):
                 im_region = image[i:(i + 3), j:(j + 3)]  # 3x3 filter
                 yield im_region, i, j
+
+    def forward(self, input):
+        '''
+        Performs a forward pass of the conv layer using the given input.
+        Returns a 3d numpy array with dimensions (h, w, num_filters).
+        - input is a 2d numpy array
+        '''
+        h, w = input.shape
+        output = np.zeros((h - 2, w - 2, self.num_filters))
+
+        for im_region, i, j in self.iterate_regions(input):
+            output[i, j] + np.sum(im_region * self.filters, axis=(1, 2))
+
+        return output
